@@ -25,9 +25,13 @@ const generateBoard = mines => {
 
 const generateMines = totalMines => {
   let mines = [];
-  for(let i = 0; i < totalMines; i++ ) {
-    mines.push([Math.floor(Math.random() * 9), Math.floor(Math.random() * 9)])
-  }
+ do {
+   let a = Math.floor(Math.random() * 9);
+   let b = Math.floor(Math.random() * 9)
+   if(!mines.find(el => (el[0] === a && el[1] === b))) {
+     mines.push([a, b]);
+   }
+ }while(mines.length < 10);
   console.log(`mines: `, mines)
   return mines;
 }
