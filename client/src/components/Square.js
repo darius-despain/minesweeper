@@ -1,5 +1,5 @@
 // import './App.css';
-import {useContext, useState} from 'react'
+import {useContext, useState, useEffect} from 'react'
 import {Context} from "../Context";
 
 const Square = ({i, j}) => {
@@ -12,18 +12,16 @@ const Square = ({i, j}) => {
       if(values.board[row][column] === 'x'){
         console.log(`you've hit a mine! you lose`)
         setters.setGameState('lose');
-      } else if(values.discovered.length >= 90) {
-        console.log("you've won!")
-        setters.setGameState('win');
-      } else {
+      } else if(!values.discovered.find(el => (el[0] === i && el[1] === j))){
         console.log(`you're safe`)
 
         setters.setDiscovered([...values.discovered, [row, column]])
-
+        // console.log(`discovered within clickHandler: `, values.discovered)
         //run countProximity on clicked square
         let boardTemp = [...values.board];
         boardTemp[i][j] = parseInt(countProximity(i, j));
         setters.setBoard(boardTemp);
+        // console.log(`board within clickHandler: `, values.board)
       }
     }
   }
@@ -68,6 +66,13 @@ const Square = ({i, j}) => {
     }
     return sum;
   }
+
+  useEffect(() => {
+    if(values.discovered.length >= 90) {
+    console.log("you've won!")
+    setters.setGameState('win');
+    }
+  }, [values.discovered])
 
   return (
     <>
